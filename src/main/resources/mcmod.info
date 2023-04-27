@@ -1,0 +1,17 @@
+
+[
+{
+  "modid": "projectdata",
+  "name": "Project D.A.T.A.",
+  "description": "Cool desription goes here",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["The_Computerizer"],
+  "credits": "The_Computerizer",
+  "logoFile": "projectdata_logo",
+  "screenshots": [],
+  "dependencies": ["theimpossiblelibrary"]
+}
+]
