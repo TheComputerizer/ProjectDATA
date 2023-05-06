@@ -64,6 +64,9 @@ repositories {
         name = 'Sponge'
         url = uri('https://repo.spongepowered.org/maven')
     }
+    flatDir {
+        dirs 'build/libs'
+    }
 }
 
 configurations {
@@ -89,10 +92,15 @@ dependencies {
     annotationProcessor("org.spongepowered:mixin:${project.mixin_version}:processor")
 
     //required mod dependencies
-    implementation(fg.deobf("maven.modrinth:the-impossible-library:${project.minecraft_version}-${project.lib_version}"))
+    //implementation(fg.deobf("maven.modrinth:the-impossible-library:${project.minecraft_version}-${project.lib_version}"))
+    //local versions of required dependencies for testing
+    //noinspection DependencyNotationArgument
+    implementation name: "theimpossiblelibrary-${project.minecraft_version}-${project.lib_version}"
+
+    //mod support dependencies
+    implementation(fg.deobf("curse.maven:had-enough-items-557549:${project.hei_version}"))
 	
 	//only needed for runtime
-    runtimeOnly(fg.deobf("curse.maven:had-enough-items-557549:${project.hei_version}"))
 }
 
 shadowJar {

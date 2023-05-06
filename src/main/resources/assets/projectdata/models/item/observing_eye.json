@@ -1,0 +1,10 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "projectdata:item/observing_eye"
+    },
+    "overrides": [
+        {"predicate": {"projectdata:eye_property": 0}, "model": "projectdata:item/observing_eye"},
+        {"predicate": {"projectdata:eye_property": 1}, "model": "projectdata:item/corrupted_eye"}
+    ]
+}

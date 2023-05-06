@@ -1,0 +1,5 @@
+item.projectdata.observing_eye.name=Observing Eye
+item.projectdata.corrupted_eye.name=Corrupted Eye
+itemGroup.projectdata=Project D.A.T.A.
+projectdata.config.registry.alphaNumParticleID=Alpha-Numeric Particle ID
+projectdata.config.registry.alphaNumParticleID.tooltip=Allows you to change the particle ID for the Alpha-Numeric particle in case of conflicts with other mods
