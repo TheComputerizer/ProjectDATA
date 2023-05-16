@@ -1,28 +1,20 @@
 package mods.thecomputerizer.projectdata.common.registry.items;
 
-import mods.thecomputerizer.projectdata.Constants;
 import mods.thecomputerizer.projectdata.ProjectData;
 import mods.thecomputerizer.projectdata.client.capability.ClientCapabilityHandler;
-import mods.thecomputerizer.projectdata.client.world.DataBurst;
 import mods.thecomputerizer.projectdata.common.CommonEffects;
 import mods.thecomputerizer.projectdata.common.network.NetworkHandler;
 import mods.thecomputerizer.projectdata.common.network.packets.PacketMotionOverload;
-import mods.thecomputerizer.theimpossiblelibrary.util.client.FontUtil;
-import mods.thecomputerizer.theimpossiblelibrary.util.client.GuiUtil;
 import mods.thecomputerizer.theimpossiblelibrary.util.object.ItemUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
@@ -50,7 +42,6 @@ public class ObservingEye extends Item {
         if(!ItemUtil.getOrCreateTag(stack).getBoolean("is_corrupted_eye")) {
             player.setActiveHand(hand);
             double store = (Math.abs(player.motionX) + Math.abs(player.motionY) + Math.abs(player.motionZ));
-            Constants.MAIN_LOG.error("STORING {} MOTION", store);
             if (world.isRemote) ClientCapabilityHandler.getPlayerCapabilities(player).storeMotion(store);
             return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
         }
