@@ -23,7 +23,7 @@ public class ParticleTest extends CommandBase {
     @Override
     @Nonnull
     public String getUsage(@Nonnull ICommandSender sender) {
-        return "Time Factor Debug command initiated";
+        return "Particle Test Debug command initiated";
     }
 
     @SuppressWarnings("NoTranslation")
@@ -34,6 +34,7 @@ public class ParticleTest extends CommandBase {
                 if(sender instanceof EntityPlayerMP)
                     NetworkHandler.sendToPlayer(new PacketParticleTest.Message(new Vec3d(1d,0d,0d),1),(EntityPlayerMP)sender);
             } catch (Exception e) {
+                e.printStackTrace();
                 throw new CommandException("Error in particletest command",e);
             }
         } else notifyCommandListener(sender, this, "Usage: '/particletest'");

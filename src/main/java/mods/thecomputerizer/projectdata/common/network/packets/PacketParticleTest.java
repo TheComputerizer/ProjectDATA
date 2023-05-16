@@ -16,8 +16,8 @@ public class PacketParticleTest implements IMessageHandler<PacketParticleTest.Me
     public IMessage onMessage(Message message, MessageContext ctx) {
         BlockPos pos = Minecraft.getMinecraft().player.getPosition();
         for(int i=0;i<message.particles;i++)
-            Minecraft.getMinecraft().player.world.spawnParticle(ParticleRegistry.RANDOM_ASCII, pos.getX(), pos.getX(),
-                pos.getX(), message.motion.x, message.motion.x, message.motion.x);
+            Minecraft.getMinecraft().player.world.spawnParticle(ParticleRegistry.RANDOM_ASCII, pos.getX(), pos.getY(),
+                pos.getZ(), message.motion.x, message.motion.x, message.motion.x);
         return null;
     }
 
@@ -30,6 +30,7 @@ public class PacketParticleTest implements IMessageHandler<PacketParticleTest.Me
 
         public Message(Vec3d motion, int particles) {
             this.motion = motion;
+            this.particles = particles;
         }
 
         @Override

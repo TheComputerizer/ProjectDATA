@@ -29,6 +29,7 @@ public class TimeFactorDebug extends CommandBase {
             try {
                 ObservingEye.TIME_FACTOR = Double.parseDouble(args[0]);
             } catch (Exception e) {
+                e.printStackTrace();
                 throw new CommandException("Error in timefactor command",e);
             }
         } else notifyCommandListener(sender, this, "Usage: '/timefactor factor'");

@@ -4,6 +4,7 @@ import mods.thecomputerizer.projectdata.client.ProjectDataClient;
 import mods.thecomputerizer.projectdata.common.capability.player.IPlayerCapabilities;
 import mods.thecomputerizer.projectdata.common.capability.player.PlayerCapabilities;
 import mods.thecomputerizer.projectdata.common.capability.player.PlayerCapabilitiesStorage;
+import mods.thecomputerizer.projectdata.common.commands.Boom;
 import mods.thecomputerizer.projectdata.common.commands.ParticleTest;
 import mods.thecomputerizer.projectdata.common.commands.TimeFactorDebug;
 import mods.thecomputerizer.projectdata.common.network.NetworkHandler;
@@ -55,6 +56,7 @@ public class ProjectData {
     public void serverStarting(FMLServerStartingEvent event) {
         event.registerServerCommand(new TimeFactorDebug());
         event.registerServerCommand(new ParticleTest());
+        event.registerServerCommand(new Boom());
         if(FMLCommonHandler.instance().getSide().isClient())
             ProjectDataClient.serverStarting(event);
     }

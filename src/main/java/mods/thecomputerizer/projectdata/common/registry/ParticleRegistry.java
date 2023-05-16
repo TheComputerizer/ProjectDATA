@@ -43,11 +43,11 @@ public class ParticleRegistry {
         String texPath = Minecraft.getMinecraft().fontRenderer.locationFontTexture.getPath();
         texPath = texPath.substring(0,texPath.lastIndexOf(".")).replace("textures/","");
         FONT_ATLAS = ev.getMap().registerSprite(new ResourceLocation(texPath));
-        ATLAS_RATIO = FONT_ATLAS.getMinU()/ FONT_ATLAS.getOriginX();
     }
 
     @SideOnly(Side.CLIENT)
     public static void postInit() {
+        ATLAS_RATIO = FONT_ATLAS.getMinU()/ FONT_ATLAS.getOriginX();
         Minecraft.getMinecraft().effectRenderer.registerParticle(RANDOM_ASCII.getParticleID(),new ParticleAscii.Factory());
     }
 

@@ -16,25 +16,42 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.vecmath.Point4f;
 
+@SuppressWarnings("SpellCheckingInspection")
 @SideOnly(Side.CLIENT)
 public class ParticleAscii extends Particle {
 
+    private static final String  POTENTIAL_CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private final double rangeFactor;
     private char curChar;
     private Point4f charUV;
-    public ParticleAscii(World world, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
+
+    public ParticleAscii(World world, double x, double y, double z, double velocityX, double velocityY, double velocityZ,
+                         float maxAge, double rangeFactor, float scale) {
         super(world, x, y, z, velocityX, velocityY, velocityZ);
+        this.rangeFactor = rangeFactor;
+        randomizeInitialPos();
         this.particleTexture = ParticleRegistry.getParticleAtlas();
-        this.motionX = velocityX + (float)(Math.random() * 2.0 - 1.0) * 0.05f;
-        this.motionY = velocityY + (float)(Math.random() * 2.0 - 1.0) * 0.05f;
-        this.motionZ = velocityZ + (float)(Math.random() * 2.0 - 1.0) * 0.05f;
-        this.particleScale = (this.rand.nextFloat() * this.rand.nextFloat() * 6.0f + 1.0f);
-        this.particleMaxAge = (int)(100f / (this.rand.nextFloat() * 0.8 + 0.2));
+        this.particleScale = scale+(this.rand.nextFloat()/(1f/(scale/2f)));
+        this.particleMaxAge = (int)(maxAge-(this.rand.nextFloat()*(maxAge/4f)));
         this.particleAlpha = 1.0f;
-        this.particleTextureIndexY = 4;
         this.curChar = '0';
         this.charUV = FontUtil.getCharUV(this.curChar,Minecraft.getMinecraft().fontRenderer);
-        setRBGColorF(0.5f,1f,0.5f);
-        Constants.MAIN_LOG.error("INITIALIZED PARTICLE");
+        setRBGColorF(0.2f,1f,0.2f);
+    }
+
+    private double randomizeDouble(double original) {
+        double factor = Math.log(this.rangeFactor) / Math.log(2);
+        return (original-factor)+(this.rand.nextDouble()*factor*2);
+    }
+
+    private void randomizeInitialPos() {
+        double x = randomizeDouble(this.posX);
+        double y = randomizeDouble(this.posY);
+        double z = randomizeDouble(this.posZ);
+        setPosition(x,y,z);
+        this.prevPosX = x;
+        this.prevPosY = y;
+        this.prevPosZ = z;
     }
 
     @Override
@@ -51,13 +68,18 @@ public class ParticleAscii extends Particle {
             this.motionX *= 0.699999988079071;
             this.motionZ *= 0.699999988079071;
         }
-        this.curChar = FontUtil.ASCII_CHARS.charAt(this.rand.nextInt(FontUtil.ASCII_CHARS.length()));
+        this.curChar = POTENTIAL_CHARS.charAt(this.rand.nextInt(POTENTIAL_CHARS.length()));
         this.charUV = FontUtil.getCharUV(this.curChar,Minecraft.getMinecraft().fontRenderer);
     }
 
     @Override
     public void renderParticle(@Nonnull BufferBuilder buffer, @Nonnull Entity entityIn, float partialTicks,
                                float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
+        FontUtil.bufferCharTex(this.curChar,Minecraft.getMinecraft().fontRenderer);
+        double minU = particleTexture.getMinU() + this.charUV.x;
+        double maxU = particleTexture.getMinU() + this.charUV.y;
+        double minV = particleTexture.getMinV() + this.charUV.z;
+        double maxV = particleTexture.getMinV() + this.charUV.w;
         double x = this.prevPosX+(this.posX-this.prevPosX)*partialTicks-interpPosX;
         double y = this.prevPosY+(this.posY-this.prevPosY)*partialTicks-interpPosY;
         double z = this.prevPosZ+(this.posZ-this.prevPosZ)*partialTicks-interpPosZ;
@@ -69,22 +91,20 @@ public class ParticleAscii extends Particle {
         int combinedBrightness = getBrightnessForRender(partialTicks);
         int skyLight = combinedBrightness >> 16 & 65535;
         int blockLight = combinedBrightness & 65535;
-        Constants.MAIN_LOG.error("PARTICLE IS AT {} {} {}",x,y,z);
-        Constants.MAIN_LOG.error("PARTICLE IS ROTATED {} {} {}",x - scaledLRDirX - scaledUDDirX,y - scaledUDDirY,z - scaledLRDirZ - scaledUDDirZ);
         buffer.pos(x - scaledLRDirX - scaledUDDirX, y - scaledUDDirY, z - scaledLRDirZ - scaledUDDirZ)
-                .tex(this.charUV.y, this.charUV.w)
+                .tex(maxU,maxV)
                 .color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha)
                 .lightmap(skyLight, blockLight).endVertex();
         buffer.pos(x - scaledLRDirX + scaledUDDirX,y + scaledUDDirY,z - scaledLRDirZ + scaledUDDirZ)
-                .tex(this.charUV.y, this.charUV.z)
+                .tex(maxU, minV)
                 .color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha)
                 .lightmap(skyLight, blockLight).endVertex();
         buffer.pos(x + scaledLRDirX + scaledUDDirX,y + scaledUDDirY,z + scaledLRDirZ + scaledUDDirZ)
-                .tex(this.charUV.x, this.charUV.z)
+                .tex(minU, minV)
                 .color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha)
                 .lightmap(skyLight, blockLight).endVertex();
         buffer.pos(x + scaledLRDirX - scaledUDDirX,y - scaledUDDirY,z + scaledLRDirZ - scaledUDDirZ)
-                .tex(this.charUV.x, this.charUV.w)
+                .tex(minU, maxV)
                 .color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha)
                 .lightmap(skyLight, blockLight).endVertex();
     }
@@ -93,7 +113,9 @@ public class ParticleAscii extends Particle {
         @Nullable
         @Override
         public Particle createParticle(int id, @Nonnull World world, double posX, double posY, double posZ, double velocityX, double velocityY, double velocityZ, @Nonnull int... args) {
-            return new ParticleAscii(Minecraft.getMinecraft().world, posX, posY, posZ, velocityX, velocityY, velocityZ);
+            return new ParticleAscii(Minecraft.getMinecraft().world, posX, posY, posZ, velocityX, velocityY, velocityZ,
+                    args.length>=1 ? (float)args[0] : 100f, args.length>=2 ? (double)args[1] : 32d,
+                    args.length>=3 ? ((float)args[2])/100f : 0.5f);
         }
     }
 }

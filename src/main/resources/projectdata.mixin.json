@@ -6,10 +6,12 @@
   "minVersion": "0.8",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "MixinItemEntity",
     "MixinPlayer"
   ],
   "client": [
     "MixinEntityRenderer",
+    "MixinRenderer",
     "MixinShaderGroup"
   ]
 }

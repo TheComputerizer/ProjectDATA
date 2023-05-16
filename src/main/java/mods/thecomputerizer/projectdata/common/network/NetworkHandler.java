@@ -1,6 +1,8 @@
 package mods.thecomputerizer.projectdata.common.network;
 
 import mods.thecomputerizer.projectdata.Constants;
+import mods.thecomputerizer.projectdata.common.network.packets.PacketBoom;
+import mods.thecomputerizer.projectdata.common.network.packets.PacketMotionOverload;
 import mods.thecomputerizer.projectdata.common.network.packets.PacketParticleTest;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -19,7 +21,9 @@ public class NetworkHandler {
 
     private static void registerPackets() {
         int id = 0;
-        NETWORK.registerMessage(PacketParticleTest.class, PacketParticleTest.Message.class, id, Side.CLIENT);
+        NETWORK.registerMessage(PacketMotionOverload.class, PacketMotionOverload.Message.class, id++, Side.SERVER);
+        NETWORK.registerMessage(PacketParticleTest.class, PacketParticleTest.Message.class, id++, Side.CLIENT);
+        NETWORK.registerMessage(PacketBoom.class, PacketBoom.Message.class, id, Side.CLIENT);
     }
 
     @SideOnly(Side.CLIENT)
